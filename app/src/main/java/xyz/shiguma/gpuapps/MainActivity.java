@@ -13,6 +13,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -24,18 +28,30 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterMethod;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
+import static android.graphics.Color.GREEN;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final String ConsumerKey = "Xstj6EdlszseIQ7rPiOprcW5O";
-    private final String ConsumerSecret = "1wBMUqt9U6BTDopLnoLfCD1Sjp8U5Zv8QNqYQX8ljOdaClzlDl";
-    private final String AccessToken = "2389446445-FAVjbX4JVOGfy2GOar9oRtsJMAS4syP6ov6AACG";
-    private final String AccessTokenSecret = "LFtPkJwGseL2hmUVSylDe83nO1h58HGGPdyG5vEEJmazU";
+    private  String ConsumerKey ;
+    private  String ConsumerSecret ;
+    private  String AccessToken ;
+    private  String AccessTokenSecret ";
 
     private final static ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Properties properties =new Properties();
+        try {
+            properties.load(new InputStreamReader(new FileInputStream("Twitterbot.properties"), "UTF-8"));
+            ConsumerKey = properties.getProperty("OAuthConsumerKey");
+            ConsumerSecret = properties.getProperty("OAuthConsumerSecret");
+            AccessToken = properties.getProperty("OAuthAccessToken");
+            AccessTokenSecret = properties.getProperty("OAuthAccessTokenSecret");
+            } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
